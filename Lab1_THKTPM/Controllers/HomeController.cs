@@ -3,6 +3,8 @@ using Lab1_THKTPM.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using System.Diagnostics;
+using ASC.Utilities;
+
 
 namespace Lab1_THKTPM.Controllers
 {
@@ -19,9 +21,20 @@ namespace Lab1_THKTPM.Controllers
 
         public IActionResult Index()
         {
+            // Set Session
+            HttpContext.Session.SetSession("Test", _settings.Value);
+
+            // Get Session
+            var settings = HttpContext.Session.GetSession<ApplicationSettings>("Test");
+
+            // Usage of IOptions
             ViewBag.Title = _settings.Value.ApplicationTitle;
+
             return View();
         }
+
+
+
 
         public IActionResult Privacy()
         {
