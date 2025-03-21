@@ -8,7 +8,7 @@ using ASC.Utilities;
 
 namespace Lab1_THKTPM.Controllers
 {
-    public class HomeController : Controller
+    public class HomeController : AnonymousController
     {
         private readonly ILogger<HomeController> _logger;
         private readonly IOptions<ApplicationSettings> _settings;

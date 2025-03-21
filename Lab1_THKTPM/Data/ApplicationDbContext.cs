@@ -1,11 +1,12 @@
 ﻿using ASC.Model.Models;
 using Lab1_THKTPM.Models;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace Lab1_THKTPM.Data
 {
-    public class ApplicationDbContext : IdentityDbContext
+    public class ApplicationDbContext : IdentityDbContext<IdentityUser>
     {
         public virtual DbSet<MasterDataKey> MasterDataKeys { get; set; }
         public virtual DbSet<MasterDataValue> MasterDataValues { get; set; }
@@ -14,11 +15,12 @@ namespace Lab1_THKTPM.Data
 
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
         {
-            Database.Migrate();
         }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
+            base.OnModelCreating(builder); // 🔹 Đặt base.OnModelCreating(builder) lên đầu
+
             builder.Entity<MasterDataKey>()
                 .HasKey(c => new { c.PartitionKey, c.RowKey });
 
@@ -27,10 +29,6 @@ namespace Lab1_THKTPM.Data
 
             builder.Entity<ServiceRequest>()
                 .HasKey(c => new { c.PartitionKey, c.RowKey });
-
-            base.OnModelCreating(builder);
         }
     }
 }
-
-
