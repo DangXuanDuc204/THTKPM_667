@@ -1,4 +1,4 @@
-(function ($) {
+﻿(function ($) {
     $(function () {
 
         $('.sidenav').sidenav();
@@ -6,19 +6,19 @@
 
         // Prevent browser back and forward buttons
         if (window.history && window.history.pushState) {
-            window.history.pushState('forward', '', window.location.href);
+            window.history.replaceState(null, '', window.location.href); // Đảm bảo trạng thái đầu tiên không thể back
+            window.history.pushState(null, '', window.location.href);
+
             $(window).on('popstate', function (e) {
-                window.history.pushState('forward', '', window.location.href);
+                window.history.pushState(null, '', window.location.href);
                 e.preventDefault();
             });
         }
 
         // Prevent right-click on entire window
-        $(document).ready(function () {
-            $(window).on("contextmenu", function () {
-                return false;
-            });
+        $(window).on("contextmenu", function () {
+            return false;
         });
 
     }); // end of document ready
-})(jQuery); // end of jQuery name space
+})(jQuery); // end of jQuery namespace

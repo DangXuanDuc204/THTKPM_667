@@ -37,7 +37,10 @@ builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 builder.Services.Configure<ApplicationSettings>(builder.Configuration.GetSection("AppSettings"));
 
 // 🔹 Đăng ký dịch vụ email & SMS
-builder.Services.AddTransient<IEmailSender, AuthMessageSender>();
+builder.Services.AddTransient<Microsoft.AspNetCore.Identity.UI.Services.IEmailSender, AuthMessageSender>();
+
+
+
 builder.Services.AddTransient<ISmsSender, AuthMessageSender>();
 
 // 🔹 Đăng ký HttpContextAccessor (Chỉ cần 1 lần)

@@ -1,42 +1,58 @@
-﻿using Microsoft.Extensions.Options;
-using MailKit.Net.Smtp;
-using MimeKit;
+﻿using System;
+using System.Net;
+using System.Net.Mail;
 using System.Threading.Tasks;
 using Lab1_THKTPM.Configuration;
+using Microsoft.AspNetCore.Identity.UI.Services;
+using Microsoft.Extensions.Options;
 
 namespace Lab1_THKTPM.Services
 {
-    public class AuthMessageSender : IEmailSender, ISmsSender
-    {
-        private readonly IOptions<ApplicationSettings> _settings;
+    public class AuthMessageSender : IEmailSender, Microsoft.AspNetCore.Identity.UI.Services.IEmailSender, ISmsSender
 
-        public AuthMessageSender(IOptions<ApplicationSettings> settings)
+
+    {
+        private readonly ApplicationSettings _settings;
+
+        public AuthMessageSender(IOptions<ApplicationSettings> appSettings)
         {
-            _settings = settings;
+            _settings = appSettings.Value;
         }
 
-        // Gửi Email
-        public async Task SendEmailAsync(string email, string subject, string message)
+        public async Task SendEmailAsync(string email, string subject, string htmlMessage)
         {
-            var emailMessage = new MimeMessage();
-            emailMessage.From.Add(new MailboxAddress("Admin", _settings.Value.SMTPAccount));
-            emailMessage.To.Add(new MailboxAddress("User", email));
-            emailMessage.Subject = subject;
-            emailMessage.Body = new TextPart("plain") { Text = message };
-
-            using (var client = new MailKit.Net.Smtp.SmtpClient())
+            try
             {
-                await client.ConnectAsync("smtp.gmail.com", 587, MailKit.Security.SecureSocketOptions.StartTls);
-                await client.AuthenticateAsync(_settings.Value.SMTPAccount, _settings.Value.SMTPPassword);
-                await client.SendAsync(emailMessage);
-                await client.DisconnectAsync(true);
+                using var smtpClient = new SmtpClient(_settings.SMTPServer)
+                {
+                    Port = _settings.SMTPPort,
+                    Credentials = new NetworkCredential(_settings.SMTPAccount, _settings.SMTPPassword),
+                    EnableSsl = true
+                };
+
+                var mailMessage = new MailMessage
+                {
+                    From = new MailAddress(_settings.SMTPAccount),
+                    Subject = subject,
+                    Body = htmlMessage,
+                    IsBodyHtml = true
+                };
+                mailMessage.To.Add(email);
+
+                await smtpClient.SendMailAsync(mailMessage);
+            }
+            catch (Exception ex)
+            {
+                // Log the exception to debug the issue
+                Console.WriteLine($"Error sending email: {ex.Message}");
+                throw;  // Rethrow the exception to propagate it
             }
         }
 
-        // Gửi SMS (hiện tại chưa triển khai)
         public async Task SendSmsAsync(string number, string message)
         {
-            // TODO: Tích hợp API SMS (ví dụ: Twilio, Firebase, v.v.)
+            // ⚠️ Tạm thời chỉ log SMS (Muốn gửi thật, cần tích hợp API như Twilio)
+            Console.WriteLine($"[SMS] Sending to {number}: {message}");
             await Task.CompletedTask;
         }
     }

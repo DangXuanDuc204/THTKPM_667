@@ -40,7 +40,10 @@ namespace Lab1_THKTPM
               .AddDefaultTokenProviders();
 
             // Add services
+            services.AddTransient<Microsoft.AspNetCore.Identity.UI.Services.IEmailSender, AuthMessageSender>();
             services.AddTransient<IEmailSender, AuthMessageSender>();
+
+
             services.AddTransient<ISmsSender, AuthMessageSender>();
             services.AddSingleton<IIdentitySeed, IdentitySeed>();
             services.AddScoped<IUnitOfWork, UnitOfWork>();
