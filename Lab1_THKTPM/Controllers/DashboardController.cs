@@ -3,7 +3,7 @@ using Lab1_THKTPM.Configuration;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 
-namespace Lab1_THKTPM.Areas.ServiceRequests.Controllers
+namespace Lab1_THKTPM.Controllers
 {
     [Area("ServiceRequests")] // Xác định Area
     public class DashboardController : BaseController

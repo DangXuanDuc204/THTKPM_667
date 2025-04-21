@@ -1,12 +1,12 @@
 ﻿@using Microsoft.AspNetCore.Http
 @using ASC.Utilities
 @using Lab1_THKTPM.Data
-@* Lấy thông tin user đang nhập *@
+
 @inject IHttpContextAccessor UserHttpContext
-@* Lấy menu *@
 @inject INavigationCacheOperations navigationCache
+
 @{
-    Layout = "_MasterLayout";
+    Layout = "_MasterLayout"; // Layout cha
     var currentUser = UserHttpContext.HttpContext.User.GetCurrentUserDetails();
 }
 
@@ -36,17 +36,25 @@
         @await Component.InvokeAsync("Lab1_THKTPM.Navigation.LeftNavigation", await navigationCache.GetNavigationCacheAsync())
     </ul>
 </header>
+
+<!-- Logout Form -->
 <form class="hide" method="post" id="logout_form" asp-area="Identity" asp-page="/Account/Logout">
     <input type="submit" value="Logout" />
 </form>
 
+<!-- Reset Password Form -->
 <form class="hide" method="post" id="resetPassword_form" asp-area="Identity" asp-page="/Account/InitiateResetPassword">
 </form>
-<main>
+
+<!-- Main Content -->
+<main style="margin-left:300px;">
     @RenderBody()
 </main>
+
+<!-- Scripts Section -->
 @section Scripts {
     @RenderSection("Scripts", required: false)
+
     <script type="text/javascript">
         $(function () {
             $('#ancrLogout').click(function () {
@@ -57,12 +65,10 @@
             });
         });
     </script>
+
     <script type="text/javascript">
         $(document).ready(function () {
             $('.collapsible').collapsible();
         });
     </script>
 }
-
-@RenderSection("Scripts", required: false)
-

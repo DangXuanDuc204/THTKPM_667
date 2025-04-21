@@ -77,7 +77,6 @@ header.secureLayout, main.secureLayout, footer.secureLayout {
     margin-bottom: 0px;
 }
 
-/* Thêm CSS xử lý lỗi validation */
 .input-field .input-validation-error {
     border-bottom: 1px solid #FF4081;
     box-shadow: 0 1px 0 0 #FF4081;
@@ -90,4 +89,28 @@ header.secureLayout, main.secureLayout, footer.secureLayout {
 
 .validation-summary-errors {
     color: #FF4081;
+}
+
+.padding-bottom-15px {
+    padding-bottom: 15px !important;
+}
+
+.cursor-hand {
+    cursor: pointer;
+}
+
+.padding-left-20px {
+    padding-left: 20px;
+}
+
+.padding-right-20px {
+    padding-right: 20px;
+}
+
+.margin-top-50px {
+    margin-top: 50px;
+}
+
+.margin-bottom-50px {
+    margin-bottom: 50px;
 }

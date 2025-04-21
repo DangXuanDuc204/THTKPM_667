@@ -102,10 +102,10 @@ namespace Lab1_THKTPM.Areas.Identity.Pages.Account
 
             ReturnUrl = returnUrl;
         }
-
         public async Task<IActionResult> OnPostAsync(string returnUrl = null)
         {
             // returnUrl = returnUrl ?? Url.Content("~/");
+
             if (ModelState.IsValid)
             {
                 var user = await _userManager.FindByEmailAsync(Input.Email);
@@ -126,7 +126,7 @@ namespace Lab1_THKTPM.Areas.Identity.Pages.Account
                 var result = await _signInManager.PasswordSignInAsync(user.UserName, Input.Password, Input.RememberMe, lockoutOnFailure: false);
                 if (result.Succeeded)
                 {
-                    _logger.LogInformation("User logged in.");
+                    _logger.LogInformation(1, "User logged in.");
                     if (!string.IsNullOrWhiteSpace(returnUrl))
                         return RedirectToAction(returnUrl);
                     else
@@ -137,6 +137,7 @@ namespace Lab1_THKTPM.Areas.Identity.Pages.Account
                 {
                     return RedirectToPage("./LoginWith2fa", new { ReturnUrl = returnUrl, RememberMe = Input.RememberMe });
                 }
+
                 if (result.IsLockedOut)
                 {
                     _logger.LogWarning("User account locked out.");
@@ -145,14 +146,12 @@ namespace Lab1_THKTPM.Areas.Identity.Pages.Account
                 else
                 {
                     ModelState.AddModelError(string.Empty, "Invalid login attempt.");
-                    return Page();
                 }
             }
 
             // If we got this far, something failed, redisplay form
             return Page();
         }
-
 
 
     }
