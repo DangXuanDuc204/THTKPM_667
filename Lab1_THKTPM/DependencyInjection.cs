@@ -7,6 +7,10 @@ using Microsoft.AspNetCore.Authentication.Google;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity.UI.Services;
+using Microsoft.Extensions.DependencyInjection;
+using ASC.Business.Interfaces;
+using ASC.Business;
+using Lab1_THKTPM.Areas.Configuration.Models;
 
 namespace Lab1_THKTPM.Services
 {
@@ -59,7 +63,7 @@ namespace Lab1_THKTPM.Services
 
             // Add services
             services.AddTransient<Microsoft.AspNetCore.Identity.UI.Services.IEmailSender, AuthMessageSender>();
-            services.AddTransient<IEmailSender, AuthMessageSender>(); // ✅ Quan trọng: Đăng ký đúng interface IEmailSender
+            services.AddTransient<IEmailSender, AuthMessageSender>();
             services.AddTransient<ISmsSender, AuthMessageSender>();
             services.AddSingleton<IIdentitySeed, IdentitySeed>();
             services.AddScoped<IUnitOfWork, UnitOfWork>();
@@ -68,10 +72,21 @@ namespace Lab1_THKTPM.Services
             services.AddDistributedMemoryCache();
             services.AddSingleton<INavigationCacheOperations, NavigationCacheOperations>();
 
+            // Add MasterDataOperations
+            services.AddScoped<IMasterDataOperations, MasterDataOperations>();
+
+            services.AddAutoMapper(typeof(MappingProfile)); // tốt hơn
+
             // Add RazorPages, MVC
             services.AddRazorPages();
             services.AddDatabaseDeveloperPageExceptionFilter();
-            services.AddControllersWithViews();
+
+            // Add controllers with views and JSON options
+            services.AddControllersWithViews()
+                .AddJsonOptions(options =>
+                {
+                    options.JsonSerializerOptions.PropertyNamingPolicy = null;
+                });
 
             return services;
         }
